@@ -1,7 +1,7 @@
 {
   "name": "luajit-decompiler",
   "version": "1.0.0",
-  "description": "Origin c++ codes from [here](https://github.com/marsinator358/luajit-decompiler-v2)",
+  "description": "Origin c++ codes from: https://github.com/marsinator358/luajit-decompiler-v2",
   "main": "./src/index.js",
   "types": "./src/index.d.ts",
   "scripts": {

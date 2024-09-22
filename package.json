@@ -1,0 +1,28 @@
+{
+  "name": "luajit-decompiler",
+  "version": "1.0.0",
+  "description": "Origin c++ codes from [here](https://github.com/marsinator358/luajit-decompiler-v2)",
+  "main": "./src/index.js",
+  "types": "./src/index.d.ts",
+  "scripts": {
+    "build": "node-gyp rebuild"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/VriskaSerket51/node-luajit-decompiler.git"
+  },
+  "keywords": [
+    "lua"
+  ],
+  "author": "IREVES",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/VriskaSerket51/node-luajit-decompiler/issues"
+  },
+  "homepage": "https://github.com/VriskaSerket51/node-luajit-decompiler#readme",
+  "dependencies": {
+    "bindings": "^1.5.0",
+    "node-addon-api": "^8.1.0"
+  },
+  "gypfile": true
+}

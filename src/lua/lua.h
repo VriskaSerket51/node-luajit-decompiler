@@ -1,12 +1,9 @@
 class Lua {
 public:
 
-	Lua(const Bytecode& bytecode, const Ast& ast, const std::string& filePath, const bool& forceOverwrite, const bool& minimizeDiffs, const bool& unrestrictedAscii);
-	~Lua();
+	Lua(const Bytecode& bytecode, const Ast& ast, const bool& forceOverwrite, const bool& minimizeDiffs, const bool& unrestrictedAscii);
 
-	void operator()();
-
-	const std::string filePath;
+	std::string operator()();
 
 private:
 
@@ -29,9 +26,6 @@ private:
 	template <typename... Strings>
 	void write(const std::string& string, const Strings&... strings);
 	void write_indent();
-	void create_file();
-	void close_file();
-	void write_file();
 
 	const Bytecode& bytecode;
 	const Ast& ast;

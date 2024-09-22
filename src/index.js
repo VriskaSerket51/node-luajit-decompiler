@@ -1,6 +1,6 @@
 const decompiler = require("bindings")("luajit-decompiler");
 
-export function decompile(filePath) {
+exports.decompile = function decompile(filePath) {
   const output = decompiler.decompile(filePath);
   return output;
 }

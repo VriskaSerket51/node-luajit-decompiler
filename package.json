@@ -12,7 +12,9 @@
     "url": "git+https://github.com/VriskaSerket51/node-luajit-decompiler.git"
   },
   "keywords": [
-    "lua"
+    "lua",
+    "luajit",
+    "decompile"
   ],
   "author": "IREVES",
   "license": "MIT",

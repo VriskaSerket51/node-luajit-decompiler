@@ -35,7 +35,7 @@ Run npm test after building. Tests verify module loading and argument/error hand
 
 Use decompileAsync(filePath, { timeout, signal }) to run native work on a worker thread. The synchronous decompile API remains available. Native bindings load on the first decompile call. Each async call creates a worker; callers should limit concurrent calls for large batches. Cancellation rejects promptly, but termination of an executing native call can wait until the native call returns. A worker thread does not isolate native crashes from the process.
 
-File I/O uses standard C++ streams and UTF-8 filesystem paths. CI is configured for Windows, macOS, and Linux with Node 22, 24, and 26. Windows is verified locally; macOS/Linux await CI verification.
+File I/O uses standard C++ streams and UTF-8 filesystem paths. Windows is verified locally; macOS/Linux builds have not yet been verified.
 
 ## Upstream source
 

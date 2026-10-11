@@ -13,6 +13,7 @@ public:
 	#include "instructions.h"
 
 	Bytecode(const std::string& filePath);
+	Bytecode(const uint8_t* data, size_t size);
 	~Bytecode();
 
 	void operator()();
@@ -42,6 +43,8 @@ private:
 	bool buffer_next_block();
 
 	std::ifstream file;
+	const uint8_t* memory = nullptr;
+	bool memoryInput = false;
 	uint64_t fileSize = 0;
 	uint64_t bytesUnread = 0;
 	std::vector<uint8_t> fileBuffer;

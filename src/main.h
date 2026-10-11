@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <bit>
 #include <cmath>
 #include <cstdint>

@@ -2,6 +2,8 @@
 
 Bytecode::Bytecode(const std::string& filePath) : filePath(filePath) {}
 
+Bytecode::Bytecode(const uint8_t* data, size_t size) : filePath("<buffer>"), memory(data), memoryInput(true), fileSize(size) {}
+
 Bytecode::~Bytecode() {
 	close_file();
 
@@ -56,6 +58,11 @@ void Bytecode::read_prototypes() {
 }
 
 void Bytecode::open_file() {
+  if (memoryInput) {
+    assert(fileSize >= MIN_FILE_SIZE, "Buffer is too small or empty", filePath, DEBUG_INFO);
+    bytesUnread = fileSize;
+    return;
+  }
   file.open(std::filesystem::path(std::u8string(reinterpret_cast<const char8_t*>(filePath.data()), filePath.size())), std::ios::binary | std::ios::ate);
   assert(file.is_open(), "Unable to open file", filePath, DEBUG_INFO);
   const auto end = file.tellg();
@@ -73,6 +80,12 @@ void Bytecode::read_file(const uint32_t& byteCount) {
   assert(bytesUnread >= byteCount, "Read would exceed end of file", filePath, DEBUG_INFO);
   assert(byteCount <= static_cast<uint64_t>(std::numeric_limits<std::streamsize>::max()), "Read exceeds stream limits", filePath, DEBUG_INFO);
   fileBuffer.resize(byteCount);
+  if (memoryInput) {
+    const auto start = memory + (fileSize - bytesUnread);
+    std::copy_n(start, byteCount, fileBuffer.begin());
+    bytesUnread -= byteCount;
+    return;
+  }
   file.read(reinterpret_cast<char*>(fileBuffer.data()), static_cast<std::streamsize>(byteCount));
   assert(file.gcount() == static_cast<std::streamsize>(byteCount), "Failed to read file", filePath, DEBUG_INFO);
   bytesUnread -= byteCount;

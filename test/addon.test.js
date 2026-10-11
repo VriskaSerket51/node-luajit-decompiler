@@ -69,3 +69,19 @@ test('stripped vararg branch reconstructs both return paths', async () => {
   assert.match(source, /return 7/);
   assert.equal(await decompileAsync(file), source);
 });
+
+test('memory inputs match path output, including offset views', async () => {
+  const fs = require('node:fs'), path = require('node:path');
+  const file = path.join(__dirname, 'fixtures', 'branch.ljc');
+  const bytes = fs.readFileSync(file), expected = decompile(file);
+  const padded = new Uint8Array(bytes.length + 9); padded.set(bytes, 4);
+  for (const input of [bytes, Uint8Array.from(bytes), padded.subarray(4, 4 + bytes.length)]) {
+    assert.equal(decompile(input), expected);
+    const promise = decompileAsync(input);
+    assert.equal(await promise, expected);
+    assert.ok(input.byteLength > 0);
+  }
+  assert.throws(() => decompile(new Uint8Array()), /too small/);
+  await assert.rejects(decompileAsync(new Uint8Array(20)), /Invalid header/);
+  assert.throws(() => decompile(new Uint16Array(20)), TypeError);
+});

@@ -20,6 +20,15 @@ std::string decompile(const char* inputPath) {
 	return output;
 }
 
+std::string decompile(const uint8_t* data, size_t size) {
+  Bytecode bytecode(data, size);
+  Ast ast(bytecode, false, false);
+  Lua lua(bytecode, ast, false, false, true);
+  bytecode();
+  ast();
+  return lua();
+}
+
 void assert(const bool& assertion, const std::string& message, const std::string& filePath, const std::string& function, const std::string& source, const uint32_t& line) {
 	if (!assertion) throw Error{
 		.message = message,

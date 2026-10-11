@@ -40,3 +40,5 @@ File I/O uses standard C++ streams and UTF-8 filesystem paths. CI is configured 
 ## Upstream source
 
 AST and condition reconstruction synchronized with marsinator358/luajit-decompiler-v2 commit 6a8a0cec48fdf175dddaca5d3fbfe3aa59b5550a (2026-05-14). CLI progress rendering is omitted; portable file I/O and the Node wrapper remain local adaptations.
+
+Both decompile(input) and decompileAsync(input, options) accept Buffer or Uint8Array as well as a file path. Bytecode is parsed in memory without temporary files. Async input is copied into the worker; the caller buffer is not transferred or detached.

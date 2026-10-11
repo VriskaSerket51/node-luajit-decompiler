@@ -3,8 +3,9 @@ const path = require('node:path');
 let native;
 
 function validatePath(filePath) {
+  if (filePath instanceof Uint8Array) return filePath;
   if (typeof filePath !== 'string' || !filePath.trim() || filePath.includes('\0')) {
-    throw new TypeError('filePath must be a non-empty string without null bytes');
+    throw new TypeError('input must be a Uint8Array or a non-empty path without null bytes');
   }
   return path.resolve(filePath);
 }

@@ -1,19 +1,3 @@
-/*
-Requirements:
-  Visual Studio
-  C++20
-  Windows API
-  Default char is unsigned (/J)
-*/
-
-#ifndef _CHAR_UNSIGNED
-#error Default char is not unsigned!
-#endif
-
-#pragma comment(linker, "/stack:268435456")
-#pragma comment(linker, "/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
-#pragma comment(lib, "shlwapi.lib")
-
 #include <bit>
 #include <cmath>
 #include <cstdint>
@@ -21,9 +5,11 @@ Requirements:
 #include <unordered_map>
 #include <vector>
 
-#include <windows.h>
-#include <fileapi.h>
-#include <shlwapi.h>
+#include <filesystem>
+#include <fstream>
+#include <limits>
+#include <type_traits>
+static_assert(std::is_unsigned_v<char>, "Default char must be unsigned");
 
 #define DEBUG_INFO __FUNCTION__, __FILE__, __LINE__
 
@@ -41,6 +27,6 @@ class Bytecode;
 class Ast;
 class Lua;
 
-#include "bytecode\bytecode.h"
-#include "ast\ast.h"
-#include "lua\lua.h"
+#include "bytecode/bytecode.h"
+#include "ast/ast.h"
+#include "lua/lua.h"

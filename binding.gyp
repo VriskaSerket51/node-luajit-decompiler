@@ -19,11 +19,8 @@
       "cflags_cc!": [
         "-fno-exceptions"
       ],
-      "cflags_cc+": [
-        "-std=c++20"
-      ],
       "defines": [
-        "NAPI_DISABLE_CPP_EXCEPTIONS"
+        "NAPI_CPP_EXCEPTIONS"
       ],
       "conditions": [
         [
@@ -50,8 +47,10 @@
           "OS==\"mac\"",
           {
             "xcode_settings": {
+              "CLANG_CXX_LANGUAGE_STANDARD": "c++20",
+              "GCC_ENABLE_CPP_EXCEPTIONS": "YES",
               "OTHER_CPLUSPLUSFLAGS": [
-                "-std=c++20"
+                "-funsigned-char"
               ]
             }
           }
@@ -63,7 +62,8 @@
               "-std=c++20"
             ],
             "cflags_cc": [
-              "-std=c++20"
+              "-std=c++20",
+              "-funsigned-char"
             ]
           }
         ]

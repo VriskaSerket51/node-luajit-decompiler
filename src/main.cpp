@@ -8,22 +8,6 @@ struct Error {
 	const std::string line;
 };
 
-static const HANDLE CONSOLE_OUTPUT = GetStdHandle(STD_OUTPUT_HANDLE);
-static const HANDLE CONSOLE_INPUT = GetStdHandle(STD_INPUT_HANDLE);
-static bool isProgressBarActive = false;
-
-static struct {
-	bool showHelp = false;
-	bool silentAssertions = false;
-	bool forceOverwrite = false;
-	bool ignoreDebugInfo = false;
-	bool minimizeDiffs = false;
-	bool unrestrictedAscii = false;
-	std::string inputPath;
-	std::string outputPath;
-	std::string extensionFilter;
-} arguments;
-
 std::string decompile(const char* inputPath) {
 	Bytecode bytecode(inputPath);
 	Ast ast(bytecode, false, false);

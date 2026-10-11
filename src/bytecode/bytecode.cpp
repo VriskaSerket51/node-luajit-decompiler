@@ -1,4 +1,4 @@
-#include "..\main.h"
+#include "../main.h"
 
 Bytecode::Bytecode(const std::string& filePath) : filePath(filePath) {}
 
@@ -56,27 +56,26 @@ void Bytecode::read_prototypes() {
 }
 
 void Bytecode::open_file() {
-	file = CreateFileA(filePath.c_str(), GENERIC_READ, NULL, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL | FILE_FLAG_SEQUENTIAL_SCAN, NULL);
-	assert(file != INVALID_HANDLE_VALUE, "Unable to open file", filePath, DEBUG_INFO);
-	DWORD fileSizeHigh = 0;
-	fileSize = GetFileSize(file, &fileSizeHigh);
-	fileSize |= (uint64_t)fileSizeHigh << 32;
-	assert(fileSize >= MIN_FILE_SIZE, "File is too small or empty", filePath, DEBUG_INFO);
-	bytesUnread = fileSize;
+  file.open(std::filesystem::path(std::u8string(reinterpret_cast<const char8_t*>(filePath.data()), filePath.size())), std::ios::binary | std::ios::ate);
+  assert(file.is_open(), "Unable to open file", filePath, DEBUG_INFO);
+  const auto end = file.tellg();
+  assert(end >= 0, "Unable to determine file size", filePath, DEBUG_INFO);
+  fileSize = static_cast<uint64_t>(end);
+  assert(fileSize >= MIN_FILE_SIZE, "File is too small or empty", filePath, DEBUG_INFO);
+  file.seekg(0, std::ios::beg);
+  assert(static_cast<bool>(file), "Unable to seek file", filePath, DEBUG_INFO);
+  bytesUnread = fileSize;
 }
-
 void Bytecode::close_file() {
-	if (file == INVALID_HANDLE_VALUE) return;
-	CloseHandle(file);
-	file = INVALID_HANDLE_VALUE;
+  if (file.is_open()) file.close();
 }
-
 void Bytecode::read_file(const uint32_t& byteCount) {
-	assert(bytesUnread >= byteCount, "Read would exceed end of file", filePath, DEBUG_INFO);
-	fileBuffer.resize(byteCount);
-	DWORD bytesRead = 0;
-	assert(ReadFile(file, fileBuffer.data(), byteCount, &bytesRead, NULL) && !(byteCount - bytesRead), "Failed to read file", filePath, DEBUG_INFO);
-	bytesUnread -= byteCount;
+  assert(bytesUnread >= byteCount, "Read would exceed end of file", filePath, DEBUG_INFO);
+  assert(byteCount <= static_cast<uint64_t>(std::numeric_limits<std::streamsize>::max()), "Read exceeds stream limits", filePath, DEBUG_INFO);
+  fileBuffer.resize(byteCount);
+  file.read(reinterpret_cast<char*>(fileBuffer.data()), static_cast<std::streamsize>(byteCount));
+  assert(file.gcount() == static_cast<std::streamsize>(byteCount), "Failed to read file", filePath, DEBUG_INFO);
+  bytesUnread -= byteCount;
 }
 
 uint32_t Bytecode::read_uleb128() {
